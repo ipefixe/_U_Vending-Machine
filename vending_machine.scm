@@ -6,7 +6,7 @@
   (newline)
   x)
 
-(define available-drink '(30 0 30))
+(define available-drink '(30 0 5))
 (define available-money '(0 10 10 10))
 (define money-as-before '())
 
@@ -62,18 +62,40 @@
                           (display "Not enough money to give back")(newline)
                           #f))))))))
 
-; TODO baisser le nombre de boisson dispo
-; TODO ajouter la possibilité que money = 'as-before
 (define (vending-machine drink money)
-  (if (< (sum-of-money money) 50)
-      #f
-      (cond ((equal? drink 'black-coffee) (if (zero? (get-black-coffee))
-                                         #f
-                                          (give-change money 50)))
-            ((equal? drink 'white-coffee) (if (zero? (get-white-coffee))
-                                         #f
-                                         (give-change money 50)))
-            ((equal? drink 'hot-chocolate) (if (zero? (get-hot-chocolate))
-                                          #f
-                                          (give-change money 50)))
-            (else #f))))
+  (cond ((equal? money 'as-before) (if (null? money-as-before)
+                                       #f
+                                       (vending-machine drink money-as-before)))
+        ((< (sum-of-money money) 50)
+         (begin
+           (set! money-as-before '())
+           #f))
+        (else
+         (cond ((equal? drink 'black-coffee) (if (zero? (get-black-coffee))
+                                                 (begin 
+                                                   (set! money-as-before money)
+                                                   #f)
+                                                 (begin
+                                                   (set! available-drink (list (- (get-black-coffee) 1) (get-white-coffee) (get-hot-chocolate)))
+                                                   (set! money-as-before '())
+                                                   (give-change money 50))))
+               ((equal? drink 'white-coffee) (if (zero? (get-white-coffee))
+                                                 (begin
+                                                   (set! money-as-before money)
+                                                   #f)
+                                                 (begin
+                                                   (set! available-drink (list (get-black-coffee) (- (get-white-coffee) 1) (get-hot-chocolate)))
+                                                   (set! money-as-before '())
+                                                   (give-change money 50))))
+               ((equal? drink 'hot-chocolate) (if (zero? (get-hot-chocolate))
+                                                  (begin
+                                                    (set! money-as-before money)
+                                                    #f)
+                                                  (begin
+                                                    (set! available-drink (list (get-black-coffee) (get-white-coffee) (- (get-hot-chocolate) 1)))
+                                                    (set! money-as-before '())
+                                                    (give-change money 50))))
+               (else (begin
+                       (set! money-as-before money)
+                       #f))))))
+  
