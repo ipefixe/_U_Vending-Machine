@@ -6,13 +6,18 @@
   (newline)
   x)
 
-(define available-money '(10 10 10 10))
+(define available-drink '(30 0 30))
+(define available-money '(0 10 10 10))
 (define money-as-before '())
 
 (define (get-1euro l) (car l))
 (define (get-50cents l) (cadr l))
 (define (get-20cents l) (caddr l))
 (define (get-10cents l) (cadddr l))
+
+(define (get-black-coffee) (car available-drink))
+(define (get-white-coffee) (cadr available-drink))
+(define (get-hot-chocolate) (caddr available-drink))
 
 (define (sum-of-money l)
   (+ (* (get-1euro l) 100) (* (get-50cents l) 50) (* (get-20cents l) 20) (* (get-10cents l) 10)))
@@ -54,9 +59,21 @@
                                         (list (get-1euro l-return) (get-50cents l-return) (get-20cents l-return) (+ (get-10cents l-return) 1))
                                         (- num 10))
                         (begin 
-                          (display "Not enough money to give back")
+                          (display "Not enough money to give back")(newline)
                           #f))))))))
 
-;(define (vending_machine drink money)
-;  (if (< (sum-of-money money) 500) ; ou pouvons nous faire le change si la somme est supérieur ?
-  
+; TODO baisser le nombre de boisson dispo
+; TODO ajouter la possibilité que money = 'as-before
+(define (vending-machine drink money)
+  (if (< (sum-of-money money) 50)
+      #f
+      (cond ((equal? drink 'black-coffee) (if (zero? (get-black-coffee))
+                                         #f
+                                          (give-change money 50)))
+            ((equal? drink 'white-coffee) (if (zero? (get-white-coffee))
+                                         #f
+                                         (give-change money 50)))
+            ((equal? drink 'hot-chocolate) (if (zero? (get-hot-chocolate))
+                                          #f
+                                          (give-change money 50)))
+            (else #f))))
