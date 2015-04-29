@@ -28,24 +28,27 @@
                                       (+ (get-10cents available-money) (get-10cents l))))
           (give-back diff)))))
 
-; TODO return a list of money back
 (define (give-back n)
-  (if (zero? n)
-      (display "Give change finished")
-      (if (and (>= n 100) (> (get-1euro available-money) 0))
-          (begin
-            (set! available-money (list (- (get-1euro available-money) 1) (get-50cents available-money) (get-20cents available-money) (get-10cents available-money)))
-            (give-back (- n 100)))
-          (if (and (>= n 50) (> (get-50cents available-money) 0))
-              (begin
-                (set! available-money (list (get-1euro available-money) (- (get-50cents available-money) 1) (get-20cents available-money) (get-10cents available-money)))
-                (give-back (- n 50)))
-              (if (and (>= n 20) (> (get-20cents available-money) 0))
-                  (begin
-                    (set! available-money (list (get-1euro available-money) (get-50cents available-money) (- (get-20cents available-money) 1) (get-10cents available-money)))
-                    (give-back (- n 20)))
-                  (if (and (>= n 10) (> (get-10cents available-money) 0))
-                      (begin
-                        (set! available-money (list (get-1euro available-money) (get-50cents available-money) (get-20cents available-money) (- (get-10cents available-money) 1)))
-                        (give-back (- n 10)))
-                      (display "Not enough money to give back")))))))
+  (let give-back-loop ((l-return '(0 0 0 0))
+                       (num n))
+    (if (zero? num)
+        (begin
+          (display "Give change finished")(newline)
+          l-return)
+        (if (and (>= num 100) (> (get-1euro available-money) 0))
+            (begin
+              (set! available-money (list (- (get-1euro available-money) 1) (get-50cents available-money) (get-20cents available-money) (get-10cents available-money)))
+              (give-back-loop (list (+ (get-1euro l-return) 1) 0 0 0) (- num 100)))
+            (if (and (>= num 50) (> (get-50cents available-money) 0))
+                (begin
+                  (set! available-money (list (get-1euro available-money) (- (get-50cents available-money) 1) (get-20cents available-money) (get-10cents available-money)))
+                  (give-back-loop (list (get-1euro l-return) (+ (get-50cents l-return) 1) 0 0) (- num 50)))
+                (if (and (>= num 20) (> (get-20cents available-money) 0))
+                    (begin
+                      (set! available-money (list (get-1euro available-money) (get-50cents available-money) (- (get-20cents available-money) 1) (get-10cents available-money)))
+                      (give-back-loop (list (get-1euro l-return) (get-50cents l-return) (+ (get-20cents l-return) 1) 0) (- num 20)))
+                    (if (and (>= num 10) (> (get-10cents available-money) 0))
+                        (begin
+                          (set! available-money (list (get-1euro available-money) (get-50cents available-money) (get-20cents available-money) (- (get-10cents available-money) 1)))
+                          (give-back-loop (list (get-1euro l-return) (get-50cents l-return) (get-20cents l-return) (+ (get-10cents l-return) 1)) (- num 10)))
+                        (display "Not enough money to give back"))))))))
