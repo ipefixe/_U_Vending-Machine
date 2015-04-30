@@ -6,8 +6,8 @@
   (newline)
   x)
 
-(define available-drink '(30 0 5))
-(define available-money '(0 10 10 10))
+(define available-drink '(30 0 5)) ; black-coffee white-coffee hot-chocolate
+(define available-money '(0 10 10 10)) ; 1euro 50cents 20cents 10cents
 (define money-as-before '())
 
 (define (get-1euro l) (car l))
