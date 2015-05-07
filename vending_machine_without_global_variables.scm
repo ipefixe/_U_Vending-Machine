@@ -6,14 +6,6 @@
   (newline)
   x)
 
-; poc
-(define test
-  (let ((n 0))
-    (lambda (num)
-      (begin
-        (set! n (+ n num))
-        n))))
-
 (define (get-1euro l) (car l))
 (define (get-50cents l) (cadr l))
 (define (get-20cents l) (caddr l))
