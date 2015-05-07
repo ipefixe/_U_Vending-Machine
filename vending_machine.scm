@@ -78,7 +78,8 @@
                                                  (begin
                                                    (set! available-drink (list (- (get-black-coffee) 1) (get-white-coffee) (get-hot-chocolate)))
                                                    (set! money-as-before '())
-                                                   (give-change money 50))))
+                                                   (give-change money 50)
+                                                   (display "Black coffee"))))
                ((equal? drink 'white-coffee) (if (zero? (get-white-coffee))
                                                  (begin
                                                    (set! money-as-before money)
@@ -86,7 +87,8 @@
                                                  (begin
                                                    (set! available-drink (list (get-black-coffee) (- (get-white-coffee) 1) (get-hot-chocolate)))
                                                    (set! money-as-before '())
-                                                   (give-change money 50))))
+                                                   (give-change money 50)
+                                                   (display "White coffee"))))
                ((equal? drink 'hot-chocolate) (if (zero? (get-hot-chocolate))
                                                   (begin
                                                     (set! money-as-before money)
@@ -94,7 +96,8 @@
                                                   (begin
                                                     (set! available-drink (list (get-black-coffee) (get-white-coffee) (- (get-hot-chocolate) 1)))
                                                     (set! money-as-before '())
-                                                    (give-change money 50))))
+                                                    (give-change money 50)
+                                                    (display "Hot chocolate"))))
                (else (begin
                        (set! money-as-before money)
                        #f))))))
