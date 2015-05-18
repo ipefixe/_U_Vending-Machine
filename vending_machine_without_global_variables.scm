@@ -64,6 +64,8 @@
         (available-money '(0 10 10 10))
         (money-as-before '()))
     (lambda (drink money)
+      (display "Available drink ")(display available-drink)(newline)
+      (display "Available money ")(display available-money)(newline)
       (cond ((equal? money 'as-before) (if (null? money-as-before)
                                            #f
                                            (vending-machine drink money-as-before)))
@@ -80,7 +82,7 @@
                                                        (set! available-drink (list (- (get-black-coffee available-drink) 1) (get-white-coffee available-drink) (get-hot-chocolate available-drink)))
                                                        (set! money-as-before '())
                                                        (give-change money 50 available-money)
-                                                       (display "Black-coffee"))))
+                                                       (display "Black-coffee")(newline)(newline))))
                    ((equal? drink 'white-coffee) (if (zero? (get-white-coffee available-drink))
                                                      (begin
                                                        (set! money-as-before money)
@@ -89,7 +91,7 @@
                                                        (set! available-drink (list (get-black-coffee available-drink) (- (get-white-coffee available-drink) 1) (get-hot-chocolate available-drink)))
                                                        (set! money-as-before '())
                                                        (give-change money 50 available-money)
-                                                       (display "White-coffee"))))
+                                                       (display "White-coffee")(newline)(newline))))
                    ((equal? drink 'hot-chocolate) (if (zero? (get-hot-chocolate available-drink))
                                                       (begin
                                                         (set! money-as-before money)
@@ -98,7 +100,13 @@
                                                         (set! available-drink (list (get-black-coffee available-drink) (get-white-coffee available-drink) (- (get-hot-chocolate available-drink) 1)))
                                                         (set! money-as-before '())
                                                         (give-change money 50 available-money)
-                                                        (display "Hot chocolate"))))
+                                                        (display "Hot chocolate")(newline)(newline))))
                    (else (begin
                            (set! money-as-before money)
                            #f))))))))
+
+(define (run)
+  (vending-machine 'black-coffee '(1 0 0 0))
+  (vending-machine 'black-coffee '(1 0 0 0))
+  (vending-machine 'hot-chocolate '(1 0 0 0))
+  (vending-machine 'hot-chocolate '(1 0 0 0)))
